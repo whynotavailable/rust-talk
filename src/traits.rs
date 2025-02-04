@@ -1,9 +1,18 @@
 #![allow(dead_code)]
 
 use std::fmt::Display;
+
+// Traits
+
 trait StringLike1 {
     fn stringify(&self) -> String;
 }
+
+pub trait StringLike2 {
+    fn stringify2(&self) -> String;
+}
+
+// impl StringLike1
 
 impl StringLike1 for String {
     fn stringify(&self) -> String {
@@ -17,9 +26,7 @@ impl StringLike1 for &str {
     }
 }
 
-pub trait StringLike2 {
-    fn stringify2(&self) -> String;
-}
+// impl StringLike2
 
 impl<T: ToString> StringLike2 for T {
     fn stringify2(&self) -> String {
