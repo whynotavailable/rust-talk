@@ -9,7 +9,7 @@ struct ErrType {
 
 impl ErrType {
     fn new(message: impl ToString) -> Self {
-        ErrType {
+        Self {
             message: message.to_string(),
         }
     }
@@ -21,19 +21,23 @@ impl Display for ErrType {
     }
 }
 
-fn throw_s<T>(val: T) -> Result<T, T> {
+type MyResult = Result<String, u8>;
+
+fn throw_s(val: u8) -> MyResult {
     Err(val)
 }
 
-fn ok_s<T>(val: T) -> Result<T, T> {
-    Ok(val)
+fn ok_s(val: impl ToString) -> MyResult {
+    Ok(val.to_string())
 }
 
-fn throw<T: ToString>(val: T) -> Result<T, ErrType> {
+type ErrResult<T> = Result<T, ErrType>;
+
+fn throw<T: ToString>(val: T) -> ErrResult<T> {
     Err(ErrType::new(val))
 }
 
-fn ok<T>(val: T) -> Result<T, ErrType> {
+fn ok<T>(val: T) -> ErrResult<T> {
     Ok(val)
 }
 
@@ -43,13 +47,13 @@ mod tests {
 
     #[test]
     fn basic() {
-        assert!(throw_s("hi").is_err());
+        assert!(throw_s(2).is_err());
         assert!(ok_s("hi").is_ok());
 
-        assert_eq!(ok_s(1).unwrap(), 1);
+        assert_eq!(ok_s("ok").unwrap(), "ok");
 
-        let s: &str = throw_s("hi err").unwrap_or_else(|e| e);
-        assert_eq!(s, "hi err");
+        let s = throw_s(5).unwrap_or_else(|e| e.to_string());
+        assert_eq!(s, "5");
     }
 
     #[test]
