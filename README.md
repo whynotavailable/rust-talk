@@ -1,9 +1,3 @@
 # Talk
 
-things to add
-
-- traits
-- errors/results
-- safety in options
-- struct functions (instance and non-instance)
-- borrowing
+This repo works as examples for a talk I'll be doing on rust.
