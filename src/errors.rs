@@ -1,4 +1,5 @@
-#![allow(dead_code)]
+#![allow(dead_code, unused_imports)]
+pub use crate::traits::StringLike2;
 use std::fmt::Display;
 
 #[derive(Debug)]
@@ -16,7 +17,7 @@ impl ErrType {
 
 impl Display for ErrType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.message)
+        write!(f, "msg: {}", self.message)
     }
 }
 
@@ -38,8 +39,6 @@ fn ok<T>(val: T) -> Result<T, ErrType> {
 
 #[cfg(test)]
 mod tests {
-    use crate::traits::StringLike2;
-
     use super::*;
 
     #[test]
@@ -70,6 +69,6 @@ mod tests {
 
     #[test]
     fn extra_fun() {
-        assert_eq!(ErrType::new("hi").stringify2(), "hi")
+        assert_eq!(ErrType::new("hi").stringify2(), "msg: hi")
     }
 }

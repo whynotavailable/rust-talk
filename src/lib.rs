@@ -1,5 +1,5 @@
 mod errors;
-mod traits;
+pub mod traits;
 
 pub fn hi() {
     println!("yo");
