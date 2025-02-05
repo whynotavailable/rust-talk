@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_imports)]
-pub use crate::traits::StringLike2;
+pub use crate::traits_traits::StringLike;
 use std::fmt::Display;
 
 #[derive(Debug)]
@@ -73,6 +73,9 @@ mod tests {
 
     #[test]
     fn extra_fun() {
-        assert_eq!(ErrType::new("hi").stringify2(), "msg: hi")
+        assert_eq!(ErrType::new("hi").stringify(), "msg: hi");
+
+        let err = ErrType::new("hi");
+        assert_eq!(StringLike::stringify(&err), "msg: hi");
     }
 }
