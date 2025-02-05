@@ -30,7 +30,7 @@ impl Display for TestThing {
 
 impl TestThing {
     fn new(s: impl StringLike) -> Self {
-        TestThing {
+        Self {
             data: s.stringify(),
         }
     }

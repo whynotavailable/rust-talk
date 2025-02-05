@@ -2,13 +2,9 @@
 
 use std::fmt::Display;
 
-// Traits
-
 pub trait StringLike {
     fn stringify(&self) -> String;
 }
-
-// impl StringLike1
 
 impl<T: ToString> StringLike for T {
     fn stringify(&self) -> String {
@@ -28,7 +24,7 @@ impl Display for TestThing {
 
 impl TestThing {
     fn new(s: impl StringLike) -> Self {
-        TestThing {
+        Self {
             data: s.stringify(),
         }
     }
