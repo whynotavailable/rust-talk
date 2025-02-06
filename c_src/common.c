@@ -4,19 +4,20 @@
  */
 #include <stdio.h>
 
-typedef struct {
+struct example {
   char *data;
-} example;
+};
 
-example example_new(char *data) {
-  example ret;
+struct example example_new(char *data) {
+  struct example ret;
   ret.data = data;
+
   return ret;
 }
-void example_print(example *self) { printf("hi %s\n", self->data); }
+void example_print(struct example *self) { printf("hi %s\n", self->data); }
 
 int main() {
-  example hi = example_new("dave");
+  struct example hi = example_new("dave");
 
   example_print(&hi);
 }
