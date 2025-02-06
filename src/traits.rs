@@ -1,18 +1,10 @@
 #![allow(dead_code)]
 
-use std::fmt::Display;
-
-trait StringLike {
+pub trait StringLike {
     fn stringify(&self) -> String;
 }
 
-impl StringLike for String {
-    fn stringify(&self) -> String {
-        self.clone()
-    }
-}
-
-impl StringLike for &str {
+impl<T: ToString> StringLike for T {
     fn stringify(&self) -> String {
         self.to_string()
     }
@@ -22,12 +14,6 @@ struct TestThing {
     data: String,
 }
 
-impl Display for TestThing {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.data)
-    }
-}
-
 impl TestThing {
     fn new(s: impl StringLike) -> Self {
         Self {
@@ -35,8 +21,7 @@ impl TestThing {
         }
     }
 
-    #[allow(clippy::needless_lifetimes)]
-    fn get_data<'a>(&'a self) -> &'a String {
+    fn get_data(&self) -> &String {
         &self.data
     }
 }

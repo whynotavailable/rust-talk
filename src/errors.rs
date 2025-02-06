@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_imports)]
-pub use crate::traits_traits::StringLike;
+pub use crate::traits::StringLike;
 use std::fmt::Display;
 
 #[derive(Debug)]
@@ -21,16 +21,6 @@ impl Display for ErrType {
     }
 }
 
-type MyResult = Result<String, u8>;
-
-fn throw_s(val: u8) -> MyResult {
-    Err(val)
-}
-
-fn ok_s(val: impl ToString) -> MyResult {
-    Ok(val.to_string())
-}
-
 type ErrResult<T> = Result<T, ErrType>;
 pub type EmptyResult = ErrResult<()>;
 
@@ -44,17 +34,38 @@ fn ok<T>(val: T) -> ErrResult<T> {
 
 #[cfg(test)]
 mod tests {
+    use std::{error::Error, fmt::Debug};
+
     use super::*;
 
     #[test]
     fn basic() {
-        assert!(throw_s(2).is_err());
-        assert!(ok_s("hi").is_ok());
+        assert!(throw(2).is_err());
+        assert!(ok("hi").is_ok());
 
-        assert_eq!(ok_s("ok").unwrap(), "ok");
+        assert_eq!(ok("ok").unwrap(), "ok");
 
-        let s = throw_s(5).unwrap_or_else(|e| e.to_string());
-        assert_eq!(s, "5");
+        let s = throw(5).unwrap_or(42);
+        assert_eq!(s, 42);
+    }
+
+    /// This method returns the page subtracted by one.
+    fn get_page(param: Option<String>) -> u32 {
+        let param: Option<u32> = param.map(|s| s.parse().unwrap_or(1));
+
+        match param {
+            Some(i) if i > 1 => i - 1,
+            _ => 0,
+        }
+    }
+
+    fn get_page_ptr(param: Option<&String>) -> u32 {
+        let param: Option<u32> = param.map(|s| s.parse().unwrap_or(1));
+
+        match param {
+            Some(i) if i > 1 => i - 1,
+            _ => 0,
+        }
     }
 
     #[test]
@@ -72,11 +83,42 @@ mod tests {
         assert_eq!(result2.unwrap(), "hi");
     }
 
+    fn some_num(s: &str) -> Option<String> {
+        Some(s.to_string())
+    }
+
+    #[test]
+    fn paging() {
+        assert_eq!(get_page(some_num("5")), 4);
+        assert_eq!(get_page(some_num("0")), 0);
+        assert_eq!(get_page(some_num("-5")), 0);
+        assert_eq!(get_page(some_num("lol what")), 0);
+
+        assert_eq!(get_page(None), 0);
+
+        let s: Option<String> = some_num("1");
+        assert_eq!(get_page(s), 0);
+        // s is gone
+
+        let s: Option<String> = some_num("1");
+        let s: Option<&String> = s.as_ref();
+        assert_eq!(get_page_ptr(s), 0);
+        assert_eq!(get_page_ptr(s), 0);
+        assert!(s.is_some())
+    }
+
     #[test]
     fn extra_fun() {
         assert_eq!(ErrType::new("hi").stringify(), "msg: hi");
 
         let err = ErrType::new("hi");
         assert_eq!(StringLike::stringify(&err), "msg: hi");
+    }
+
+    fn check_traits<T: Debug + Display>(_: T) {}
+
+    #[test]
+    fn traits() {
+        check_traits(ErrType::new("hi"));
     }
 }
