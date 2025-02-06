@@ -3,8 +3,8 @@ pub use crate::traits_traits::StringLike;
 use std::fmt::Display;
 
 #[derive(Debug)]
-struct ErrType {
-    message: String,
+pub struct ErrType {
+    pub message: String,
 }
 
 impl ErrType {
@@ -32,6 +32,7 @@ fn ok_s(val: impl ToString) -> MyResult {
 }
 
 type ErrResult<T> = Result<T, ErrType>;
+pub type EmptyResult = ErrResult<()>;
 
 fn throw<T: ToString>(val: T) -> ErrResult<T> {
     Err(ErrType::new(val))

@@ -1,5 +1,6 @@
-use talk::hi;
+use talk::errors::EmptyResult;
 
-fn main() {
-    hi();
+fn main() -> EmptyResult {
+    println!("Hi Folks!");
+    Ok(())
 }
