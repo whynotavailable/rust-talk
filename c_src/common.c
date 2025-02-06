@@ -8,11 +8,15 @@ typedef struct {
   char *data;
 } example;
 
+example example_new(char *data) {
+  example ret;
+  ret.data = data;
+  return ret;
+}
 void example_print(example *self) { printf("hi %s\n", self->data); }
 
 int main() {
-  example hi;
-  hi.data = "bob";
+  example hi = example_new("dave");
 
   example_print(&hi);
 }
