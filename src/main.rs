@@ -33,6 +33,7 @@ mod test {
         let data = StringData {
             msg: "hi".to_string(),
         };
+
         let pt: *const StringData = &data;
         let loc = pt as usize;
 
@@ -62,7 +63,8 @@ mod test {
 
     #[test]
     fn copy_struct() {
-        let data: Data = Data { msg: "hi" };
+        let data = Data { msg: "hi" };
+
         let pt: *const Data = &data;
         let loc = pt as usize;
 
