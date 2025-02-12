@@ -24,6 +24,16 @@ impl TestThing {
     fn get_data(&self) -> &String {
         &self.data
     }
+
+    fn print(&self) {
+        println!("{}", self.data);
+    }
+}
+
+impl StringLike for TestThing {
+    fn stringify(&self) -> String {
+        self.data.clone()
+    }
 }
 
 #[cfg(test)]
