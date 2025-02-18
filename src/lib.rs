@@ -1,4 +1,4 @@
 mod borrowing;
-pub mod errors;
+mod errors;
 mod scratch;
 mod traits;
