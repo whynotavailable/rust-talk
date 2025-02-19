@@ -50,8 +50,8 @@ mod tests {
     }
 
     /// This method returns the page subtracted by one.
-    fn get_page(param: Option<String>) -> u32 {
-        let param: Option<u32> = param.map(|s| s.parse().unwrap_or(1));
+    fn get_page_string(param: Option<String>) -> i32 {
+        let param: Option<i32> = param.map(|s| s.parse().unwrap_or(1));
 
         match param {
             Some(i) if i > 1 => i - 1,
@@ -59,8 +59,8 @@ mod tests {
         }
     }
 
-    fn get_page_ptr(param: Option<&String>) -> u32 {
-        let param: Option<u32> = param.map(|s| s.parse().unwrap_or(1));
+    fn get_page_str(param: Option<&str>) -> i32 {
+        let param: Option<i32> = param.map(|s| s.parse().unwrap_or(1));
 
         match param {
             Some(i) if i > 1 => i - 1,
@@ -88,22 +88,44 @@ mod tests {
     }
 
     #[test]
-    fn paging() {
-        assert_eq!(get_page(some_num("5")), 4);
-        assert_eq!(get_page(some_num("0")), 0);
-        assert_eq!(get_page(some_num("-5")), 0);
-        assert_eq!(get_page(some_num("lol what")), 0);
+    fn conditionals() {
+        let op: Option<String> = Some("hi".to_string());
+        if let Some(s) = op {
+            println!("{}", s);
+        }
+    }
 
-        assert_eq!(get_page(None), 0);
+    fn wrap_bool(b: bool) -> Option<bool> {
+        Some(b)
+    }
+
+    fn none_bool() -> Option<bool> {
+        None
+    }
+
+    #[test]
+    fn conditionals2() {
+        assert!(none_bool().unwrap_or(true));
+        assert!(wrap_bool(true).unwrap_or(true));
+        assert!(!wrap_bool(false).unwrap_or(true));
+    }
+
+    #[test]
+    fn paging() {
+        assert_eq!(get_page_string(some_num("5")), 4);
+        assert_eq!(get_page_string(some_num("0")), 0);
+        assert_eq!(get_page_string(some_num("-5")), 0);
+        assert_eq!(get_page_string(some_num("lol what")), 0);
+
+        assert_eq!(get_page_string(None), 0);
 
         let s: Option<String> = some_num("1");
-        assert_eq!(get_page(s), 0);
+        assert_eq!(get_page_string(s), 0);
         // s is gone
 
-        let s: Option<String> = some_num("1");
-        let s: Option<&String> = s.as_ref();
-        assert_eq!(get_page_ptr(s), 0);
-        assert_eq!(get_page_ptr(s), 0);
+        let s: Option<&str> = Some("1");
+        assert_eq!(get_page_str(s), 0);
+        assert_eq!(get_page_str(s), 0);
         assert!(s.is_some())
     }
 
